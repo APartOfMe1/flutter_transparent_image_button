@@ -1,10 +1,8 @@
 library transparent_image_button;
 
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
@@ -17,31 +15,31 @@ class TransparentImageButton extends StatefulWidget {
 
   const TransparentImageButton.assets(this.imagePath,
       {Key? key,
-        this.frameBuilder,
-        this.semanticLabel,
-        this.excludeFromSemantics = false,
-        this.scale,
-        this.width,
-        this.height,
-        this.color,
-        this.colorBlendMode,
-        this.fit,
-        this.alignment = Alignment.center,
-        this.repeat = ImageRepeat.noRepeat,
-        this.centerSlice,
-        this.matchTextDirection = false,
-        this.gaplessPlayback = false,
-        this.package,
-        this.filterQuality = FilterQuality.low,
-        this.onTapInside,
-        this.onTapOutside,
-        this.onHoverInside,
-        this.onHoverOutside,
-        this.updateCursor = true,
-        this.offCursor = SystemMouseCursors.basic,
-        this.onCursor = SystemMouseCursors.click,
-        this.opacityThreshold = 0.0,
-        this.checkTap = false})
+      this.frameBuilder,
+      this.semanticLabel,
+      this.excludeFromSemantics = false,
+      this.scale,
+      this.width,
+      this.height,
+      this.color,
+      this.colorBlendMode,
+      this.fit,
+      this.alignment = Alignment.center,
+      this.repeat = ImageRepeat.noRepeat,
+      this.centerSlice,
+      this.matchTextDirection = false,
+      this.gaplessPlayback = false,
+      this.package,
+      this.filterQuality = FilterQuality.low,
+      this.onTapInside,
+      this.onTapOutside,
+      this.onHoverInside,
+      this.onHoverOutside,
+      this.updateCursor = true,
+      this.offCursor = SystemMouseCursors.basic,
+      this.onCursor = SystemMouseCursors.click,
+      this.opacityThreshold = 0.0,
+      this.checkTap = false})
       : super(key: key);
 
   // TODO: TransparentImageButton.network
@@ -292,18 +290,19 @@ class _TransparentImageButton extends State<TransparentImageButton> {
     px = (px / widgetScale);
     py = (py / widgetScale);
 
-    int pixel32 = photo!.getPixelSafe(px.toInt(), py.toInt());
-    int hex = abgrToArgb(pixel32);
+    num normalizedAlpha = photo!.getPixelSafe(px.toInt(), py.toInt()).aNormalized;
 
-    if (Color(hex).opacity <=
-        widget.opacityThreshold) { // Pixel meets the opacity threshold
+    if (normalizedAlpha <= widget.opacityThreshold) {
+      // Pixel meets the opacity threshold
       if (hover && widget.onHoverOutside != null) {
         widget.onHoverOutside!();
       } else if (!hover && widget.onTapOutside != null) {
         widget.onTapOutside!();
       }
-    } else { // Pixel is opaque
-      if (hover) { // This is a hover event, not a tap
+    } else {
+      // Pixel is opaque
+      if (hover) {
+        // This is a hover event, not a tap
         if (widget.onHoverInside != null) {
           widget.onHoverInside!();
         }
@@ -323,7 +322,7 @@ class _TransparentImageButton extends State<TransparentImageButton> {
   }
 
   void setImageBytes(ByteData imageBytes) {
-    List<int> values = imageBytes.buffer.asUint8List();
+    Uint8List values = imageBytes.buffer.asUint8List();
     photo = null;
     photo = img.decodeImage(values)!;
   }
