@@ -223,27 +223,6 @@ class _TransparentImageButton extends State<TransparentImageButton> {
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: cursor,
-      onHover: (details) async {
-        // Check if the current pixel is transparent
-        var search = await searchPixel(details.position, true);
-
-        if (widget.updateCursor == true) {
-          if (search == true) {
-            cursor = widget.onCursor;
-            setState(() {});
-          } else {
-            cursor = widget.offCursor;
-            setState(() {});
-          }
-        }
-      },
-      onExit: (event) {
-        // Make sure the cursor is properly set when exiting
-        if (widget.updateCursor == true) {
-          cursor = widget.offCursor;
-          setState(() {});
-        }
-      },
       child: GestureDetector(
         onPanDown: (details) => widget.checkTap ? null : searchPixel(details.globalPosition, false),
         onTapDown: (details) => widget.checkTap ? searchPixel(details.globalPosition, false) : null,
