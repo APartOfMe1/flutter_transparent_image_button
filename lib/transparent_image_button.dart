@@ -40,7 +40,7 @@ class TransparentImageButton extends StatefulWidget {
         this.onCursor = SystemMouseCursors.click,
         this.opacityThreshold = 0.0,
         this.checkTap = false,
-        this.useNetworkImage = true})
+        this.useNetworkImage = false})
       : super(key: key);
 
   // TODO: TransparentImageButton.network
@@ -238,7 +238,6 @@ class _TransparentImageButton extends State<TransparentImageButton> {
           child: () {
             // Load image from network
             if (widget.useNetworkImage == true) {
-              print('using network');
               return Image.network(
                 widget.imagePath,
                 key: imageKey,
@@ -259,8 +258,6 @@ class _TransparentImageButton extends State<TransparentImageButton> {
                 filterQuality: widget.filterQuality,
               );
             }
-
-            print('using local');
 
             // Load local asset
             return Image.asset(
