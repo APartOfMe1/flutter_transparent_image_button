@@ -238,7 +238,7 @@ class _TransparentImageButton extends State<TransparentImageButton> {
           child: () {
             // Load image from network
             if (widget.useNetworkImage == true) {
-              print('using network')
+              print('using network');
               return Image.network(
                 widget.imagePath,
                 key: imageKey,
@@ -260,7 +260,7 @@ class _TransparentImageButton extends State<TransparentImageButton> {
               );
             }
 
-            print('using local')
+            print('using local');
 
             // Load local asset
             return Image.asset(
