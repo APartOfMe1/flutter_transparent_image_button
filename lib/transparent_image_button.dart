@@ -226,30 +226,10 @@ class _TransparentImageButton extends State<TransparentImageButton> {
 
   SystemMouseCursor cursor = SystemMouseCursors.basic;
 
-  static final appContainer = html.window.document.querySelectorAll('flt-glass-pane')[0];
-
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: cursor,
-      onHover: (details) async {
-        // Check if the current pixel is transparent
-        var search = await searchPixel(details.position, true);
-
-        if (widget.updateCursor == true) {
-          if (search == true) {
-            appContainer.style.cursor = 'pointer';
-          } else {
-            appContainer.style.cursor = 'default';
-          }
-        }
-      },
-      onExit: (event) {
-        // Make sure the cursor is properly set when exiting
-        if (widget.updateCursor == true) {
-          appContainer.style.cursor = 'default';
-        }
-      },
       child: GestureDetector(
         onPanDown: (details) => widget.checkTap ? null : searchPixel(details.globalPosition, false),
         onTapDown: (details) => widget.checkTap ? searchPixel(details.globalPosition, false) : null,
