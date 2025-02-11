@@ -15,31 +15,32 @@ class TransparentImageButton extends StatefulWidget {
 
   const TransparentImageButton.assets(this.imagePath,
       {Key? key,
-      this.frameBuilder,
-      this.semanticLabel,
-      this.excludeFromSemantics = false,
-      this.scale,
-      this.width,
-      this.height,
-      this.color,
-      this.colorBlendMode,
-      this.fit,
-      this.alignment = Alignment.center,
-      this.repeat = ImageRepeat.noRepeat,
-      this.centerSlice,
-      this.matchTextDirection = false,
-      this.gaplessPlayback = false,
-      this.package,
-      this.filterQuality = FilterQuality.low,
-      this.onTapInside,
-      this.onTapOutside,
-      this.onHoverInside,
-      this.onHoverOutside,
-      this.updateCursor = true,
-      this.offCursor = SystemMouseCursors.basic,
-      this.onCursor = SystemMouseCursors.click,
-      this.opacityThreshold = 0.0,
-      this.checkTap = false})
+        this.frameBuilder,
+        this.semanticLabel,
+        this.excludeFromSemantics = false,
+        this.scale,
+        this.width,
+        this.height,
+        this.color,
+        this.colorBlendMode,
+        this.fit,
+        this.alignment = Alignment.center,
+        this.repeat = ImageRepeat.noRepeat,
+        this.centerSlice,
+        this.matchTextDirection = false,
+        this.gaplessPlayback = false,
+        this.package,
+        this.filterQuality = FilterQuality.low,
+        this.onTapInside,
+        this.onTapOutside,
+        this.onHoverInside,
+        this.onHoverOutside,
+        this.updateCursor = true,
+        this.offCursor = SystemMouseCursors.basic,
+        this.onCursor = SystemMouseCursors.click,
+        this.opacityThreshold = 0.0,
+        this.checkTap = false,
+        this.useNetworkImage = false})
       : super(key: key);
 
   // TODO: TransparentImageButton.network
@@ -210,6 +211,13 @@ class TransparentImageButton extends StatefulWidget {
 
   // Scale
   final double? scale;
+
+  /// Whether to load image from network.
+  ///
+  /// If true, Image.network() will be used. If false, Image.asset() will be used to load from local assets.
+  ///
+  /// Defaults to false.
+  final bool useNetworkImage;
 }
 
 class _TransparentImageButton extends State<TransparentImageButton> {
@@ -224,29 +232,55 @@ class _TransparentImageButton extends State<TransparentImageButton> {
     return MouseRegion(
       cursor: cursor,
       child: GestureDetector(
-        onPanDown: (details) => widget.checkTap ? null : searchPixel(details.globalPosition, false),
-        onTapDown: (details) => widget.checkTap ? searchPixel(details.globalPosition, false) : null,
-        // onPanUpdate: (details) => searchPixel(details.globalPosition),
-        child: Image.asset(
-          widget.imagePath,
-          key: imageKey,
-          frameBuilder: widget.frameBuilder,
-          semanticLabel: widget.semanticLabel,
-          excludeFromSemantics: widget.excludeFromSemantics,
-          scale: widget.scale,
-          width: widget.width,
-          height: widget.height,
-          color: widget.color,
-          colorBlendMode: widget.colorBlendMode,
-          fit: widget.fit,
-          alignment: widget.alignment,
-          repeat: widget.repeat,
-          centerSlice: widget.centerSlice,
-          matchTextDirection: widget.matchTextDirection,
-          gaplessPlayback: widget.gaplessPlayback,
-          package: widget.package,
-          filterQuality: widget.filterQuality,
-        ),
+          onPanDown: (details) => widget.checkTap ? null : searchPixel(details.globalPosition, false),
+          onTapDown: (details) => widget.checkTap ? searchPixel(details.globalPosition, false) : null,
+          // onPanUpdate: (details) => searchPixel(details.globalPosition),
+          child: () {
+            // Load image from network
+            if (widget.useNetworkImage == true) {
+              return Image.network(
+                widget.imagePath,
+                key: imageKey,
+                frameBuilder: widget.frameBuilder,
+                semanticLabel: widget.semanticLabel,
+                excludeFromSemantics: widget.excludeFromSemantics,
+                scale: widget.scale ?? 1.0,
+                width: widget.width,
+                height: widget.height,
+                color: widget.color,
+                colorBlendMode: widget.colorBlendMode,
+                fit: widget.fit,
+                alignment: widget.alignment,
+                repeat: widget.repeat,
+                centerSlice: widget.centerSlice,
+                matchTextDirection: widget.matchTextDirection,
+                gaplessPlayback: widget.gaplessPlayback,
+                filterQuality: widget.filterQuality,
+              );
+            }
+
+            // Load local asset
+            return Image.asset(
+              widget.imagePath,
+              key: imageKey,
+              frameBuilder: widget.frameBuilder,
+              semanticLabel: widget.semanticLabel,
+              excludeFromSemantics: widget.excludeFromSemantics,
+              scale: widget.scale,
+              width: widget.width,
+              height: widget.height,
+              color: widget.color,
+              colorBlendMode: widget.colorBlendMode,
+              fit: widget.fit,
+              alignment: widget.alignment,
+              repeat: widget.repeat,
+              centerSlice: widget.centerSlice,
+              matchTextDirection: widget.matchTextDirection,
+              gaplessPlayback: widget.gaplessPlayback,
+              package: widget.package,
+              filterQuality: widget.filterQuality,
+            );
+          }()
       ),
     );
   }
