@@ -40,8 +40,7 @@ class TransparentImageButton extends StatefulWidget {
       this.offCursor = SystemMouseCursors.basic,
       this.onCursor = SystemMouseCursors.click,
       this.opacityThreshold = 0.0,
-      this.checkTap = false,
-      this.containerId = "app-container"})
+      this.checkTap = false})
       : super(key: key);
 
   // TODO: TransparentImageButton.network
@@ -212,11 +211,6 @@ class TransparentImageButton extends StatefulWidget {
 
   // Scale
   final double? scale;
-
-  /// ID of the body tag in index.html
-  ///
-  /// Defaults to "app-container"
-  final String? containerId;
 }
 
 class _TransparentImageButton extends State<TransparentImageButton> {
