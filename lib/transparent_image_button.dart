@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
+import 'package:universal_html/prefer_sdk/html.dart' as html;
 
 class TransparentImageButton extends StatefulWidget {
   final String imagePath;
@@ -39,7 +40,8 @@ class TransparentImageButton extends StatefulWidget {
       this.offCursor = SystemMouseCursors.basic,
       this.onCursor = SystemMouseCursors.click,
       this.opacityThreshold = 0.0,
-      this.checkTap = false})
+      this.checkTap = false,
+      this.containerId = "app-container"})
       : super(key: key);
 
   // TODO: TransparentImageButton.network
@@ -210,6 +212,11 @@ class TransparentImageButton extends StatefulWidget {
 
   // Scale
   final double? scale;
+
+  /// ID of the body tag in index.html
+  ///
+  /// Defaults to "app-container"
+  final String? containerId;
 }
 
 class _TransparentImageButton extends State<TransparentImageButton> {
@@ -218,6 +225,8 @@ class _TransparentImageButton extends State<TransparentImageButton> {
   img.Image? photo;
 
   SystemMouseCursor cursor = SystemMouseCursors.basic;
+
+  static final appContainer = html.window.document.getElementById(widget.containerId);
 
   @override
   Widget build(BuildContext context) {
@@ -229,19 +238,16 @@ class _TransparentImageButton extends State<TransparentImageButton> {
 
         if (widget.updateCursor == true) {
           if (search == true) {
-            cursor = widget.onCursor;
-            setState(() {});
+            appContainer.style.cursor = widget.onCursor;
           } else {
-            cursor = widget.offCursor;
-            setState(() {});
+            appContainer.style.cursor = widget.offCursor;
           }
         }
       },
       onExit: (event) {
         // Make sure the cursor is properly set when exiting
         if (widget.updateCursor == true) {
-          cursor = widget.offCursor;
-          setState(() {});
+          appContainer.style.cursor = widget.offCursor;
         }
       },
       child: GestureDetector(
