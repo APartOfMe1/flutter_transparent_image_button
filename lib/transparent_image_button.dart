@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
-import 'package:universal_html/prefer_sdk/html.dart' as html;
+import 'dart:html' as html;
 
 class TransparentImageButton extends StatefulWidget {
   final String imagePath;
@@ -226,7 +226,7 @@ class _TransparentImageButton extends State<TransparentImageButton> {
 
   SystemMouseCursor cursor = SystemMouseCursors.basic;
 
-  static final appContainer = html.window.document.getElementById(widget.containerId);
+  static final appContainer = html.window.document.querySelectorAll('flt-glass-pane')[0];
 
   @override
   Widget build(BuildContext context) {
@@ -238,16 +238,16 @@ class _TransparentImageButton extends State<TransparentImageButton> {
 
         if (widget.updateCursor == true) {
           if (search == true) {
-            appContainer.style.cursor = widget.onCursor;
+            appContainer.style.cursor = 'pointer';
           } else {
-            appContainer.style.cursor = widget.offCursor;
+            appContainer.style.cursor = 'default';
           }
         }
       },
       onExit: (event) {
         // Make sure the cursor is properly set when exiting
         if (widget.updateCursor == true) {
-          appContainer.style.cursor = widget.offCursor;
+          appContainer.style.cursor = 'default';
         }
       },
       child: GestureDetector(
