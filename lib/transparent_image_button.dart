@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
-import 'dart:html' as html;
 
 class TransparentImageButton extends StatefulWidget {
   final String imagePath;
